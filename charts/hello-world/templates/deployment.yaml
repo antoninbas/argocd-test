@@ -52,6 +52,9 @@ spec:
             - configMapRef:
                 name: "{{ .env.configMapName }}"
           {{- end }}
+          env:
+            - name: PRINT_REQUEST
+              value: "1"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
