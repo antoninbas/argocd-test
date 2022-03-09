@@ -1,25 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "hello-world.fullname" . }}
+  name: {{ include "web-server.fullname" . }}
   labels:
-    {{- include "hello-world.labels" . | nindent 4 }}
+    {{- include "web-server.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "hello-world.selectorLabels" . | nindent 6 }}
+      {{- include "web-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.podAnnotations }}
       annotations:
-        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-        {{- end }}
-        {{- with .Values.ocs }}
-        "oneclick-saas.io/config/checksum": "{{ .env.configMapHash }}"
-        {{- end }}
+      {{- end }}
       labels:
-        {{- include "hello-world.selectorLabels" . | nindent 8 }}
+        {{- include "web-server.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -47,11 +44,6 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.ocs }}
-          envFrom:
-            - configMapRef:
-                name: "{{ .env.configMapName }}"
-          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
