@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- with .Values.ocs }}
-        "oneclick-saas.io/config/checksum": "{{ .env.configMapHash }}"
+        "oneclick-saas.io/config-checksum": "{{ .env.configMapHash }}"
         {{- end }}
       labels:
         {{- include "mydrive.selectorLabels" . | nindent 8 }}
